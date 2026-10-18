@@ -24,6 +24,10 @@ Każdy PR zawiera: co działa, jak uruchomić, jak sprawdzono i co jeszcze jest 
 Do istotnej mechaniki dodaj test jej zachowania. Wyniki z `data/runs`, środowisko `.venv`,
 hasła i tokeny nie trafiają do repo. Nie zmieniamy wersji zależności bez wspólnego sprawdzenia.
 
+GitHub Actions uruchamia instalację, testy i przykład CLI na kilku wersjach Pythona
+oraz na Linux i Windows. Przed scaleniem zbiorczy status `CI` musi być zielony.
+Nie wyłączaj testu ani sprawdzenia tylko po to, żeby uzyskać zielony wynik.
+
 Konwencje: kod i identyfikatory po angielsku, dokumentacja zespołowa po polsku,
 cztery spacje, nazwy modułów `snake_case`, klasy `PascalCase`. Losowania wykorzystują
 generator otrzymany od modelu; nie dodawaj globalnych wywołań `random`/`numpy.random`.

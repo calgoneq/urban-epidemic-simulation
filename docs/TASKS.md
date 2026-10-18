@@ -3,6 +3,13 @@
 Przed rozpoczęciem: uruchom instalację, testy i przykład z README. Utwórz gałąź z aktualnego
 main. Każdy PR zawiera instrukcję uruchomienia, wynik testów i krótki opis ograniczeń.
 
+Zadania na GitHubie: [L-01](https://github.com/calgoneq/urban-epidemic-simulation/issues/1),
+[K-01](https://github.com/calgoneq/urban-epidemic-simulation/issues/2),
+[R-01](https://github.com/calgoneq/urban-epidemic-simulation/issues/3),
+[M-01](https://github.com/calgoneq/urban-epidemic-simulation/issues/4),
+[W-04](https://github.com/calgoneq/urban-epidemic-simulation/issues/5).
+Aktualizację postępu zapisujemy w odpowiadającym zadaniu.
+
 | ID / właściciel | Zadanie | Odbiór |
 | --- | --- | --- |
 | L-01 / Łukasz | Generator syntetycznych gospodarstw domowych, miejsc pracy i szkół; przypisania agentów oraz prosty harmonogram dzień/noc w nowej implementacji miasta | Każdy agent ma dom i jedno miejsce w danej godzinie; rano/wieczorem lokalizacje są zgodne z planem; działają testy i model z podmienionym miastem |

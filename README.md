@@ -91,3 +91,5 @@ Stack: Python, Mesa, NumPy, SciPy, pandas, Matplotlib i docelowo Streamlit.
 - [Stan projektu](docs/STATUS.md) — ukończone elementy i następny krok.
 
 Kod znajduje się w `src/`, konfiguracje w `configs/`, a testy w `tests/`.
+Automatyczne sprawdzanie zmian jest dostępne w zakładce [Actions](https://github.com/calgoneq/urban-epidemic-simulation/actions).
+W pull requestach zbiorczy status `CI` obejmuje testy na Linux i Windows.
