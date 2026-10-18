@@ -1,48 +1,93 @@
 # Wieloagentowy system symulacji rozprzestrzeniania się epidemii w aglomeracji miejskiej z adaptacją zachowań społecznych i optymalizacją strategii kwarantanny
 
-Projekt zaawansowanej symulacji wieloagentowej (Agent-Based Model – ABM) analizujący dynamikę rozprzestrzeniania się patogenów w środowisku zurbanizowanym z uwzględnieniem sprzężenia zwrotnego między decyzjami administracyjnymi a psychologią tłumu.
+Projekt zespołowy na przedmiot **Studio projektowe 1**, AGH.
+Prowadzący: **prof. Andrzej Bielecki**. Temat został zaakceptowany.
 
----
+Celem jest porównanie strategii kwarantanny i ograniczania kontaktów przy zmieniającym
+się przestrzeganiu zasad przez mieszkańców. Docelowy model połączy epidemię SEIR,
+mobilność w mieście, zachowania społeczne i obciążenie opieki zdrowotnej.
 
-## Cele projektu
+**Aktualna wersja: 0.1 — fundament silnika.** Działa godzinowa symulacja SEIR
+w Mesie, konfiguracja JSON, powtarzalne losowanie, zapis CSV/JSON i wykres PNG.
+Miasto, zachowania i polityka mają proste implementacje zastępcze oraz wspólne interfejsy.
+Nie są jeszcze zaimplementowane hospitalizacje, kwarantanna, zmęczenie restrykcjami,
+optymalizacja ani dashboard. Parametry przykładowe nie są kalibracją konkretnej choroby.
 
-- Modelowanie dynamiki transmisji wirusa w oparciu o stany **SEIR** (*Susceptible*, *Exposed*, *Infected*, *Recovered*).
-- Badanie wpływu ograniczeń mobilności i izolacji na wskaźnik reprodukcji wirusa (R<sub>t</sub>).
-- Analiza zjawiska zmęczenia restrykcjami (*pandemic fatigue*) oraz zmiennego poziomu dyscypliny społecznej (*compliance rate*).
-- Wyznaczanie optymalnego balansu między wydolnością ochrony zdrowia a minimalizacją paraliżu miejskiego.
+**Uruchomienie**
 
----
+Python **3.11–3.13**, zalecany **3.12**, oraz Git. Polecenia wykonuj z katalogu projektu.
+Wersje głównych bibliotek są zapisane w `requirements.txt`.
 
-## Stack technologiczny
+Windows / PowerShell — osobne środowisko bez konieczności aktywacji skryptu:
 
-- **Python 3.10+** – główny język programowania
-- **Mesa** – framework do modelowania wieloagentowego (ABM)
-- **NumPy** – obliczenia macierzowe i stochastyczne
-- **Matplotlib** – generowanie wykresów i analiz statystycznych
-- **Streamlit** – interaktywny interfejs telemetryczny i dashboard analityczny czasu rzeczywistego
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements-dev.txt
+.\.venv\Scripts\python.exe -m pytest -q
+.\.venv\Scripts\python.exe main.py
+```
 
----
+Jeżeli korzystasz już z odpowiedniego środowiska, używaj jego polecenia `python`:
 
-## Struktura zespołu i podział odpowiedzialności
+```bash
+python -m pip install -r requirements-dev.txt
+python -m pytest -q
+python main.py
+```
 
-1. **Tech Lead / Core Engine Developer** – [Wojciech Caldzudis]  
-   *Architektura systemu, silnik agentowy Mesa, implementacja stanów SEIR i mechaniki transmisji.*
-2. **Środowisko i Mobilność (Spatial/GIS Developer)** – [Łukasz Borysiuk]  
-   *Topologia miasta, punkty POI (domy, miejsca pracy, szkoły, transport), cykl dobowy agentów.*
-3. **Inżynier Zachowań Społecznych (Behavioral Modeler)** – [Raman Chmirou]  
-   *Model psychologiczny percepcji ryzyka, zmęczenie obostrzeniami, skłonność do łamania kwarantanny.*
-4. **Inżynier Polityki Sanitarnej (Policy/Rule Engine)** – [Karol Baran]  
-   *Silnik regułowy obostrzeń, scenariusze lockdownu, progowanie obciążenia szpitali.*
-5. **Frontend & Data Visualization (Streamlit / Analytics)** – [Misha Daniov]  
-   *Interaktywny dashboard, telemetria na żywo, wizualizacja krzywych epidemiologicznych.*
+Linux / macOS:
 
----
+```bash
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m pytest -q
+.venv/bin/python main.py
+```
 
-## Struktura katalogów
+Do samego uruchomienia wystarczy `requirements.txt`. Wersja `requirements-dev.txt`
+instaluje dodatkowo narzędzie do testów. Nie ma potrzeby instalowania projektu jako paczki.
 
-```text
-├── src/          # Kod źródłowy symulacji oraz aplikacji
-├── docs/         # Dokumentacja projektowa, specyfikacja i raporty
-├── data/         # Zbiory danych wejściowych oraz wyniki symulacji
-├── requirements.txt # Zależności środowiska Python
-└── README.md     # Opis projektu
+**Przykłady**
+
+```bash
+python main.py --days 30 --population 200 --seed 7
+python main.py --config configs/no_transmission.json
+python main.py --days 10 --no-plot
+python main.py --help
+```
+
+Każdy przebieg tworzy osobny katalog `data/runs/<identyfikator>/`:
+
+| Plik | Zawartość |
+| --- | --- |
+| `metrics.csv` | Godzinowa historia stanów, zakażeń i aktywnych mnożników |
+| `config.json` | Parametry po zastosowaniu argumentów z terminala |
+| `summary.json` | Szczyt zakaźnych, łączne zakażenia i stany końcowe |
+| `metadata.json` | Seed znajduje się w konfiguracji; tutaj wersje bibliotek, kodu, nazwy modułów i czas obliczeń |
+| `seir.png` | Wykres S/E/I/R; pomijany przy `--no-plot` |
+
+Wyniki nie nadpisują wcześniejszych przebiegów i są ignorowane przez Git.
+`--output` zmienia katalog nadrzędny dla nowych przebiegów.
+
+**Zespół i moduły**
+
+| Osoba | Odpowiedzialność | Główne pliki |
+| --- | --- | --- |
+| Wojciech Caldzudis | Architektura, silnik Mesa, SEIR, transmisja i integracja | `src/agent.py`, `src/model.py`, `src/config.py`, `src/contracts.py` |
+| Łukasz Borysiuk | Miasto, miejsca aktywności i mobilność | `src/city.py`, przyszły `src/mobility.py` |
+| Raman Chmirou | Ryzyko, zmęczenie i przestrzeganie zasad | `src/behavior.py` |
+| Karol Baran | Strategie ograniczeń, kwarantanna i eksperymenty | `src/policies.py`, przyszły `src/experiments.py` |
+| Misha Daniov | Dashboard, wizualizacja i prezentacja wyników | przyszłe `app.py`, `src/charts.py`; uzgodnione zmiany w `src/results.py` |
+
+Stack: Python, Mesa, NumPy, SciPy, pandas, Matplotlib i docelowo Streamlit.
+
+**Dokumentacja**
+
+- [Roadmapa](docs/ROADMAP.md) — etapy i kryteria zakończenia.
+- [Model](docs/MODEL.md) — jednostki, mechanika zakażeń i ograniczenia.
+- [Interfejsy](docs/INTERFACES.md) — jak podłączyć własny moduł.
+- [Pierwsze zadania](docs/TASKS.md) — zakres prac dla zespołu.
+- [Zasady współpracy](CONTRIBUTING.md) — gałęzie, testy i pull requesty.
+- [Stan projektu](docs/STATUS.md) — ukończone elementy i następny krok.
+
+Kod znajduje się w `src/`, konfiguracje w `configs/`, a testy w `tests/`.

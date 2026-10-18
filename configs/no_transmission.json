@@ -1,0 +1,11 @@
+{
+  "population": 500,
+  "initial_infected": 5,
+  "initial_exposed": 0,
+  "days": 30,
+  "latent_hours": 48,
+  "infectious_hours": 120,
+  "contacts_per_day": 12.0,
+  "transmission_probability": 0.0,
+  "seed": 42
+}
