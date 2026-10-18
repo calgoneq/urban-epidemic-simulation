@@ -27,13 +27,13 @@ Projekt zaawansowanej symulacji wieloagentowej (Agent-Based Model – ABM) anali
 
 1. **Tech Lead / Core Engine Developer** – [Wojciech Caldzudis]  
    *Architektura systemu, silnik agentowy Mesa, implementacja stanów SEIR i mechaniki transmisji.*
-2. **Środowisko i Mobilność (Spatial/GIS Developer)** – [Osoba 2]  
+2. **Środowisko i Mobilność (Spatial/GIS Developer)** – [Łukasz Borysiuk]  
    *Topologia miasta, punkty POI (domy, miejsca pracy, szkoły, transport), cykl dobowy agentów.*
-3. **Inżynier Zachowań Społecznych (Behavioral Modeler)** – [Osoba 3]  
+3. **Inżynier Zachowań Społecznych (Behavioral Modeler)** – [Raman Chmirou]  
    *Model psychologiczny percepcji ryzyka, zmęczenie obostrzeniami, skłonność do łamania kwarantanny.*
-4. **Inżynier Polityki Sanitarnej (Policy/Rule Engine)** – [Osoba 4]  
+4. **Inżynier Polityki Sanitarnej (Policy/Rule Engine)** – [Karol Baran]  
    *Silnik regułowy obostrzeń, scenariusze lockdownu, progowanie obciążenia szpitali.*
-5. **Frontend & Data Visualization (Streamlit / Analytics)** – [Osoba 5]  
+5. **Frontend & Data Visualization (Streamlit / Analytics)** – [Misha Daniov]  
    *Interaktywny dashboard, telemetria na żywo, wizualizacja krzywych epidemiologicznych.*
 
 ---
