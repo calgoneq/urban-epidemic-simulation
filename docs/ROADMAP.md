@@ -1,7 +1,7 @@
 **Roadmapa — Urban Epidemic Simulation**
 
-Temat zaakceptowany przez prowadzącego. Zespół pięcioosobowy. Kolejność poniżej
-oznacza zależności i odbiór rezultatów; terminy kalendarzowe ustalamy wspólnie.
+Kolejność poniżej oznacza zależności i odbiór rezultatów;
+terminy kalendarzowe ustalamy wspólnie.
 
 Pytanie projektowe: jak zmęczenie restrykcjami wpływa na skuteczność stałych
 i adaptacyjnych strategii ograniczania kontaktów oraz kwarantanny?
@@ -35,6 +35,6 @@ przeciążenie opieki i utracone godziny zaplanowanej aktywności. Wybór dotycz
 konfiguracji w naszym modelu, nie globalnie najlepszej polityki dla prawdziwego miasta.
 Finalistów sprawdzamy na dodatkowych seedach.
 
-Wymagania raportu z ustaleń prowadzącego: maksymalnie 5 stron, plan vs wykonanie,
-rzeczywiste problemy i rozwiązania, rysunki/wykresy. Po akceptacji raportu ustalamy
-termin demonstracji. Szczegółowa dokumentacja i dane pozostają w repozytorium.
+Sprawozdanie: maksymalnie 5 stron, porównanie planu z wykonaniem,
+napotkane problemy i rozwiązania oraz rysunki i wykresy.
+Szczegółowa dokumentacja i dane pozostają w repozytorium.

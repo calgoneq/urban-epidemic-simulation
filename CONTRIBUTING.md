@@ -1,7 +1,6 @@
 **Zasady współpracy**
 
-Pierwszy fundament został przygotowany bezpośrednio dla `main`. Po dołączeniu
-zespołu każda kolejna zmiana, także lidera, przechodzi przez gałąź zadania i pull request.
+Każda zmiana przechodzi przez gałąź zadania i pull request.
 `main` powinien zawierać wersję, którą można uruchomić zgodnie z README.
 
 1. Pobierz aktualny `main`: `git switch main`, następnie `git pull --ff-only`.
