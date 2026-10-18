@@ -1,7 +1,7 @@
 # Wieloagentowy system symulacji rozprzestrzeniania się epidemii w aglomeracji miejskiej z adaptacją zachowań społecznych i optymalizacją strategii kwarantanny
 
 Projekt zespołowy na przedmiot **Studio projektowe 1**, AGH.
-Prowadzący: **prof. Andrzej Bielecki**. Temat został zaakceptowany.
+Prowadzący: **prof. Andrzej Bielecki**.
 
 Celem jest porównanie strategii kwarantanny i ograniczania kontaktów przy zmieniającym
 się przestrzeganiu zasad przez mieszkańców. Docelowy model połączy epidemię SEIR,
