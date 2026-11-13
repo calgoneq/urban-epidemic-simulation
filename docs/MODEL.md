@@ -68,6 +68,38 @@ Te wartości służą sprawdzaniu działania silnika. Nie są dopasowane do wybr
 ani prawdziwego miasta. Przed eksperymentem interpretowanym epidemiologicznie należy
 wybrać patogen i udokumentować źródła lub kalibrację parametrów.
 
+**Miasto syntetyczne (`SyntheticCity`, L-01)**
+
+Implementacja `CityModel` z `src/city.py`; harmonogram jest w `src/mobility.py`. Parametry
+`CityConfig` i `ScheduleConfig` to wartości demonstracyjne, nie kalibracja prawdziwego miasta.
+
+- Role: dziecko (szkoła), pracownik (miejsce pracy), osoba bez stałego miejsca w ciągu dnia.
+  Rola jest losowana raz na agenta; domyślnie 20% dzieci i 65% pracujących wśród pozostałych.
+- Gospodarstwa domowe mają od 1 do 6 osób (wagi w `household_size_weights`). Każde ma co najmniej
+  jedną osobę dorosłą, o ile w populacji są dorośli.
+- Miejsca pracy i szkoły mają nierówne rozmiary (rozkład log-normalny, średnia
+  `mean_workplace_size` / `mean_school_size`). Miejsc rozrywki jest tyle, że przypada
+  `people_per_leisure_venue` osób na miejsce; każdy agent wybiera spośród `favorite_venues`.
+- Dzień 0 to poniedziałek, dni 5 i 6 tygodnia to weekend. Noc (22–6) wszyscy spędzają w domu.
+  W dni robocze pracownik ma blok 8 godzin zaczynający się o 7, 8 lub 9 (losowane raz na osobę),
+  dziecko jest w szkole 8–15. Poza tym są w domu, z opcjonalnym wyjściem do miejsca rozrywki
+  (2 godziny; wieczorem w dni robocze, w ciągu dnia dla osób bez stałego miejsca, w weekend dla
+  wszystkich). Wyjście nigdy nie zastępuje pracy ani szkoły.
+- Plan na dobę jest losowany raz na początku doby (z generatora modelu) i potem tylko odczytywany,
+  więc każdy agent ma dokładnie jedno miejsce w każdej godzinie. Przypisania powstają przy pierwszym
+  `locate`, bo identyfikatory agentów nadaje Mesa. Dla nowego przebiegu twórz nowy obiekt miasta.
+- Identyfikatory miejsc: `home-N`, `work-N`, `school-N`, `leisure-N`.
+
+Użycie: `EpidemicModel(config, city=SyntheticCity())`. Szybkie porównanie z miastem bazowym:
+`python -m src.city`.
+
+Ograniczenia: brak geografii i dojazdów (przemieszczenie jest natychmiastowe), brak personelu szkół
+łączącego dzieci z dorosłymi w szkole, brak zamknięć typów miejsc i reakcji na `rules`/`decisions`
+(silnik już stosuje ich mnożniki; zamknięcia wymagają rozszerzonych kontraktów w M3). Silnik
+liczy intensywność kontaktów na godzinę niezależnie od liczebności miejsca, więc osoba w małym domu
+i w szkole ma tę samą średnią liczbę potencjalnych kontaktów; miasto zmienia tylko to, z kim się
+kontaktuje. Czy to założenie wystarcza, należy uzgodnić z właścicielem silnika.
+
 **Metryki i odtwarzalność**
 
 CSV zawiera wiersz początkowy `hour=0`, następnie jeden wiersz na godzinę.
@@ -83,7 +115,8 @@ Każdy moduł losuje wyłącznie przez przekazany generator.
 
 **Ograniczenia i dalsze decyzje**
 
-- `BaselineCity` umieszcza wszystkich w jednym miejscu; nie ma jeszcze planu dnia ani demografii.
+- `BaselineCity` umieszcza wszystkich w jednym miejscu; służy jako przypadek kontrolny. Plan dnia i
+  prostą demografię ma `SyntheticCity` (sekcja poniżej), która nie jest jeszcze domyślnym miastem.
 - `NeutralBehavior` nie modeluje ryzyka ani zmęczenia. Argument `public_risk` jest obecnie
   jawnym przybliżeniem z rzeczywistego I/N, ignorowanym przez tę implementację.
   Przed badaniem reakcji na publiczne dane ustalimy mechanizm wykrywania i sygnał obserwowany.
