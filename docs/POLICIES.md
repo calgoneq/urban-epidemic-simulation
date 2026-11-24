@@ -10,17 +10,61 @@ Strategie 1 i 2 są zaimplementowane w `src/policies.py`, strategia 3 jest na ra
 - Dni liczymy od 0. Polityka jest oceniana na początku każdej doby i obowiązuje 24 godziny.
 - W pliku `metrics.csv` wiersz `hour=h` opisuje zakończoną godzinę, więc zasady dnia `d`
   widać w wierszach `hour = 24d+1 ... 24d+24`.
+- Mnożniki podawaj jako liczby ułamkowe (`0.0`, `0.5`, `1.0`), żeby kolumna
+  `policy_contact_multiplier` miała zawsze ten sam typ.
+
+## Przykład uruchomienia
+
+Polityki podpina się w kodzie, przez argument `policy` modelu (wybór z CLI/JSON nie jest jeszcze dostępny):
+
+```python
+from src.config import SimulationConfig
+from src.model import EpidemicModel
+from src.policies import ConstantRestrictions, ScheduledRestrictions
+
+config = SimulationConfig(population=200, days=60, seed=7)
+
+# stała redukcja kontaktów o 50%
+history = EpidemicModel(config, policy=ConstantRestrictions(0.5)).run()
+
+# lockdown w dniach 10-19, lżejsze ograniczenia w dniach 30-39
+policy = ScheduledRestrictions([(10, 20, 0.3), (30, 40, 0.5)])
+history = EpidemicModel(config, policy=policy).run()
+
+print(history[["hour", "I", "cumulative_infections"]].tail())
+```
+
+Do nowego, niezależnego przebiegu twórz nowy obiekt polityki i nowy model.
+Testy: `python -m pytest -q`.
 
 ## Strategia 1: stała (`ConstantRestrictions`)
 
 Ten sam mnożnik przez cały przebieg. Nazwa w wynikach: `constant_<mnożnik>`.
 Rola: punkt odniesienia dla pozostałych strategii.
 
+| Parametr | Znaczenie |
+| --- | --- |
+| `contact_multiplier` | Udział normalnych kontaktów, liczba z przedziału [0, 1] |
+
+Niepoprawna wartość (poza [0, 1], NaN, `bool`) powoduje `ValueError` już przy tworzeniu polityki.
+
 ## Strategia 2: harmonogram (`ScheduledRestrictions`)
 
-Lista okresów `(start_day, end_day, mnożnik)`, przedziały półotwarte `[start, end)`.
-Okresy nie mogą się nakładać. Poza okresami obowiązuje 1.0 (`no_restrictions`).
-Rola: lockdown z góry zaplanowany, niezależny od przebiegu epidemii.
+Lista okresów `(start_day, end_day, mnożnik)`, przedziały półotwarte `[start, end)`,
+jak w `range(start, end)`: dzień końcowy **nie** należy do okresu, więc `(10, 20, ...)`
+obejmuje dni 10-19, a okresy `(10, 20, ...)` i `(20, 30, ...)` mogą się stykać.
+Poza okresami obowiązuje 1.0 (`no_restrictions`). Nazwa w okresie: `scheduled_<mnożnik>`.
+Rola: lockdown zaplanowany z góry, niezależny od przebiegu epidemii.
+
+| Element okresu | Znaczenie |
+| --- | --- |
+| `start_day` | Pierwszy dzień obowiązywania, liczba całkowita >= 0 |
+| `end_day` | Pierwszy dzień bez ograniczenia, liczba całkowita > `start_day` |
+| `mnożnik` | Udział normalnych kontaktów, liczba z przedziału [0, 1] |
+
+Okresy nie mogą się nakładać, kolejność na liście nie ma znaczenia.
+Błędne dane (nakładanie, `end <= start`, ujemny start, zły mnożnik) powodują `ValueError`
+przy tworzeniu polityki. Pusta lista oznacza brak ograniczeń.
 
 ## Strategia 3: adaptacyjna (opis, bez implementacji)
 
@@ -93,15 +137,4 @@ Wymagają rozszerzenia modelu (po W-04):
 | --- | --- |
 | Przeciążenie opieki | pojemności i zapotrzebowania opieki |
 | Utracone godziny aktywności | mierzenia zaplanowanej vs. wykonanej aktywności |
-| Skuteczność wykrywania | statusu wykrycia |
-
-"Koszt społeczny" z tabeli pierwszej to tylko przybliżenie z mnożnika polityki. Nie uwzględnia
-zachowań ani zmęczenia (R-01) i nie jest utraconą aktywnością.
-
-## Ograniczenia
-
-- Polityki nie są jeszcze wybierane z CLI ani z JSON, podpina się je w kodzie
-  (`EpidemicModel(config, policy=...)`).
-- Obecne miasto to jedno miejsce dla wszystkich, więc strategie różnią się tylko profilem czasowym.
-- Wyniki pojedynczego przebiegu są losowe. Porównania wymagają wielu seedów (M6).
-- Parametry demonstracyjne nie są kalibracją żadnej choroby.
+| Skuteczność wykrywania | statusu
